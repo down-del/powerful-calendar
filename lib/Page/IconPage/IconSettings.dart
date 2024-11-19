@@ -7,6 +7,15 @@ class IconSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      body: Center(
+        child: Text(
+          "尚未開發",
+          style: TextStyle(
+            fontSize: 80,
+            color: Colors.red,
+          ),
+        ),
+      ),
       bottomNavigationBar: HomeDownButton(), 
     );
   }
