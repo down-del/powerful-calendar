@@ -11,11 +11,11 @@ import 'dart:convert'; // 引入 json 库用于序列化和反序列化数据
 class SpendStorage {
   // 存储事件数据的方法
   Future<void> saveSpend({
-    required int year, // 事件的年份
-    required int month, // 事件的月份
-    required int day, // 事件的日期
-    required int hour, // 事件的小时
-    required int minute, // 事件的分钟
+    required int spendYear, // 事件的年份
+    required int spendMonth, // 事件的月份
+    required int spendDay, // 事件的日期
+    required int spendHour, // 事件的小时
+    required int spendMinute, // 事件的分钟
     required String spendDescription, // 事件的描述
     required String spendOption, // 事件的消费类型
     required double spendAmount, // 新增：事件的花费金额
@@ -27,11 +27,11 @@ class SpendStorage {
 
     // 创建一个新的事件数据，使用 Map 结构，新增 completed 字段并默认设置为 false
     Map<String, dynamic> newSpend = {
-      'year': year,
-      'month': month,
-      'day': day,
-      'hour': hour,
-      'minute': minute,
+      'year': spendYear,
+      'month': spendMonth,
+      'day': spendDay,
+      'hour': spendHour,
+      'minute': spendMinute,
       'spend_description': spendDescription,
       'spend_option': spendOption,
       'spend_amount': spendAmount, // 新增花费金额字段
@@ -109,7 +109,7 @@ class _IconAddSpendState extends State<IconAddSpend> {
   // 异步加载已保存的事件
   Future<void> _loadSpends() async {
     List<Map<String, dynamic>> Spends = await _spendStorage.loadSpend();
-    print('加载的事件: $Spends'); // 输出事件列表，便于调试
+    print('加載事件: $Spends'); // 输出事件列表，便于调试
   }
 
   @override
@@ -117,7 +117,7 @@ class _IconAddSpendState extends State<IconAddSpend> {
     return Scaffold(
       bottomNavigationBar: HomeDownButton(), // 页面底部按钮，使用自定义组件
       appBar: AppBar(
-        title: Text('新增待辦事項'), // 显示在 AppBar 上的标题
+        title: Text('新增消費'), // 显示在 AppBar 上的标题
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0), // 设置内边距，使内容更整齐
@@ -205,6 +205,16 @@ class _IconAddSpendState extends State<IconAddSpend> {
             ),
             SizedBox(height: 20), // 设置输入框与选择类别按钮之间的间距
 
+            // 花费金额输入框
+            TextField(
+              controller: _AmountController, // 与金额输入框的控制器绑定
+              keyboardType: TextInputType.number, // 设置为数字输入类型
+              decoration: InputDecoration(
+                  labelText: '消費金額', border: OutlineInputBorder()), // 设置输入框样式
+            ),
+
+            SizedBox(height: 20), // 设置消费类别选择与花费金额输入框之间的间距
+
             // 选择消费类别的下拉框
             DropdownButton<String>(
               value: spendOption, // 当前选择的消费类别
@@ -221,16 +231,10 @@ class _IconAddSpendState extends State<IconAddSpend> {
                 );
               }).toList(),
             ),
-            SizedBox(height: 20), // 设置消费类别选择与花费金额输入框之间的间距
 
-            // 花费金额输入框
-            TextField(
-              controller: _AmountController, // 与金额输入框的控制器绑定
-              keyboardType: TextInputType.number, // 设置为数字输入类型
-              decoration: InputDecoration(
-                  labelText: '消費金額', border: OutlineInputBorder()), // 设置输入框样式
-            ),
             SizedBox(height: 20), // 设置金额输入框与新增事件按钮之间的间距
+
+            
 
             // 新增事件按钮
             ElevatedButton(
@@ -238,11 +242,11 @@ class _IconAddSpendState extends State<IconAddSpend> {
                 double spendAmount =
                     double.tryParse(_AmountController.text) ?? 0.0; // 获取用户输入的金额，默认值为 0.0
                 await _spendStorage.saveSpend(
-                  year: year,
-                  month: month,
-                  day: day,
-                  hour: hour,
-                  minute: minute,
+                  spendYear: year,
+                  spendMonth: month,
+                  spendDay: day,
+                  spendHour: hour,
+                  spendMinute: minute,
                   spendDescription: _SpendController.text, // 获取事件描述
                   spendOption: spendOption, // 获取消费类别
                   spendAmount: spendAmount, // 保存花费金额
@@ -254,7 +258,7 @@ class _IconAddSpendState extends State<IconAddSpend> {
                   ),
                 );
               },
-              child: Text('新增事件'), // 按钮文本
+              child: Text('新增消費'), // 按钮文本
             ),
           ],
         ),
